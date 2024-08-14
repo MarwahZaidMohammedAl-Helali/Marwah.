@@ -1,0 +1,24 @@
+/* src/components/common/BlogCard.css */
+
+.blog-card {
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 16px;
+    margin: 16px 0;
+  }
+  
+  .blog-card h2 {
+    font-size: 1.5em;
+    margin-bottom: 8px;
+  }
+  
+  .blog-card p {
+    font-size: 1em;
+    color: #555;
+  }
+  
+  .blog-card a {
+    text-decoration: none;
+    color: #007bff;
+  }
+  
