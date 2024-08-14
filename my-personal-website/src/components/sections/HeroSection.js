@@ -29,7 +29,7 @@ const HeroSubtitle = styled.p`
   font-size: 1.25rem;
 `;
 
-const HeroSection = () => {
+export const  HeroSection = () => {
   return (
     <HeroSectionContainer>
       <HeroContent>

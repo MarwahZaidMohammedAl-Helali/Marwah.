@@ -37,7 +37,7 @@ const SkillFill = styled.div`
   transition: width 0.3s ease;
 `;
 
-const SkillsSection = () => {
+export const SkillsSection = () => {
   const skills = [
     { name: 'JavaScript', level: 85 },
     { name: 'React', level: 90 },

@@ -17,8 +17,7 @@ const ContactInfo = styled.p`
   font-size: 1.125rem;
   margin-bottom: 1.5rem;
 `;
-
-const ContactSection = () => {
+export const ContactSection = () => {
   return (
     <ContactSectionContainer>
       <ContactTitle>Contact Me</ContactTitle>

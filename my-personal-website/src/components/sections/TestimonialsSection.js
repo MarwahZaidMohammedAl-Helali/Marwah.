@@ -19,7 +19,7 @@ const testimonials = [
   { text: 'Professional and dedicated.', author: 'Client B' }
 ];
 
-const TestimonialsSection = () => {
+export const TestimonialsSection = () => {
   return (
     <TestimonialsSectionContainer>
       <TestimonialsTitle>Testimonials</TestimonialsTitle>

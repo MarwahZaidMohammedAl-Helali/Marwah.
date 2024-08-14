@@ -19,7 +19,7 @@ const blogPosts = [
   { id: 2, title: 'Blog Post Two', excerpt: 'Excerpt of the second blog post.' }
 ];
 
-const BlogSection = () => {
+export const BlogSection = () => {
   return (
     <BlogSectionContainer>
       <BlogTitle>Recent Blog Posts</BlogTitle>

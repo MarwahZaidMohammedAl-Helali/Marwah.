@@ -26,7 +26,7 @@ const projects = [
   { title: 'Project Two', description: 'Description of project two.', image: 'path/to/image2.jpg' }
 ];
 
-const ProjectsSection = () => {
+export const ProjectsSection = () => {
   return (
     <ProjectsSectionContainer>
       <ProjectsTitle>Projects</ProjectsTitle>
@@ -39,5 +39,5 @@ const ProjectsSection = () => {
   );
 };
 
-export default ProjectsSection;
+export default ProjectsSection; // Ensure default export
 

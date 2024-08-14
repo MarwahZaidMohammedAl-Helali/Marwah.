@@ -27,7 +27,7 @@ const AboutText = styled.p`
   line-height: 1.6;
 `;
 
-const AboutSection = () => {
+export const  AboutSection = () => {
   return (
     <AboutSectionContainer>
       <img src={profilePhoto} alt="Profile" />
