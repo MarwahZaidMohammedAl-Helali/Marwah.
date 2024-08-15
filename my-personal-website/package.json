@@ -4,20 +4,21 @@
   "description": "A modern personal website built with React and NestJS.",
   "main": "index.js",
   "scripts": {
-    "start": "react-scripts start",
+    "start": "cross-env PORT=4000 react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "deploy": "gh-pages -d build"
   },
   "dependencies": {
+    "cross-env": "^7.0.3",
     "emailjs-com": "^2.6.4",
     "react": "^18.0.0",
     "react-dom": "^18.0.0",
     "react-ga": "^3.3.0",
     "react-icons": "^5.3.0",
-    "react-router-dom": "^6.0.0",
-    "styled-components": "^5.3.0"
+    "react-router-dom": "^6.26.0",
+    "styled-components": "^5.3.11"
   },
   "devDependencies": {
     "@babel/plugin-proposal-private-property-in-object": "^7.20.7",

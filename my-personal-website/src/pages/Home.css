@@ -1,0 +1,19 @@
+/* src/pages/Home.css */
+
+.home-container {
+    padding: 20px;
+    font-family: Arial, sans-serif;
+  }
+  
+  .section-container {
+    margin-bottom: 40px;
+  }
+  
+  .placeholder-message {
+    text-align: center;
+    color: #ff0000;
+    font-size: 1.2em;
+    margin-top: 50px;
+  }
+  
+ 
