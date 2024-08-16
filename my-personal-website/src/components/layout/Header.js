@@ -1,162 +1,219 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
+import { Link, useLocation } from 'react-router-dom';
 import styled from 'styled-components';
-import { Link } from 'react-router-dom';
+import { FaBars, FaTimes } from 'react-icons/fa';
+import { HiSun, HiMoon } from 'react-icons/hi';
 
-// Container for the header
 const HeaderContainer = styled.header`
   width: 100%;
-  background-color: #fff;
-  color: #333;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 0 20px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  padding: 1rem 2rem;
+  background: ${({ isScrolled }) => (isScrolled ? 'rgba(0, 0, 0, 0.8)' : 'transparent')};
+  backdrop-filter: blur(10px);
+  box-shadow: ${({ isScrolled }) => (isScrolled ? '0 4px 20px rgba(0, 0, 0, 0.3)' : 'none')};
   position: fixed;
   top: 0;
   left: 0;
   z-index: 1000;
-  transition: background-color 0.3s ease;
-  
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  transition: background 0.3s ease, box-shadow 0.3s ease;
+
   @media (max-width: 768px) {
-    padding: 0 10px;
+    padding: 1rem 1rem;
   }
 `;
 
-// Logo styling
-const Logo = styled(Link)`
-  font-size: 1.8em;
-  font-weight: bold;
-  color: #333;
-  text-decoration: none;
+const Logo = styled.div`
+  font-size: 2.4rem;
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 700;
+  color: ${({ theme }) => theme.primary};
+  background: linear-gradient(90deg, ${({ theme }) => theme.primary}, ${({ theme }) => theme.secondary});
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  cursor: pointer;
+  transition: color 0.3s ease, background 0.3s ease;
+
+  &:hover {
+    background: linear-gradient(90deg, ${({ theme }) => theme.secondary}, ${({ theme }) => theme.primary});
+  }
+
+  @media (max-width: 768px) {
+    font-size: 1.8rem;
+  }
+`;
+
+const NavMenu = styled.nav`
   display: flex;
   align-items: center;
 
-  &:hover {
-    color: #f4a261;
-  }
-
   @media (max-width: 768px) {
-    font-size: 1.5em;
+    position: fixed;
+    top: 0;
+    right: ${({ isOpen }) => (isOpen ? '0' : '-100%')};
+    width: 100%;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.9);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    transition: right 0.3s ease;
+    z-index: 999;
   }
 `;
 
-// Navigation styling for desktop
-const Nav = styled.nav`
-  @media (max-width: 768px) {
-    display: none;
-  }
-`;
-
-const NavList = styled.ul`
+const NavLinks = styled.ul`
   display: flex;
   list-style: none;
-  gap: 20px;
+
+  @media (max-width: 768px) {
+    flex-direction: column;
+    align-items: center;
+    margin-top: 4rem;
+  }
 `;
 
-const NavItem = styled.li`
+const NavLink = styled.li`
+  margin: 0 1.5rem;
+
+  @media (max-width: 768px) {
+    margin: 1rem 0;
+  }
+
   a {
-    color: #333;
+    color: ${({ theme }) => theme.headerText};
     text-decoration: none;
-    font-size: 1em;
-    transition: color 0.3s ease;
+    font-size: 1.2rem;
+    font-family: 'Montserrat', sans-serif;
+    position: relative;
+    padding: 0.5rem 0;
+    transition: color 0.3s ease, transform 0.3s ease;
+
+    &.active {
+      color: ${({ theme }) => theme.primary};
+      &:after {
+        width: 100%;
+        background-color: ${({ theme }) => theme.primary};
+      }
+    }
 
     &:hover {
-      color: #f4a261;
+      color: ${({ theme }) => theme.primary};
+      transform: translateY(-3px);
+
+      &:after {
+        width: 100%;
+        background-color: ${({ theme }) => theme.primary};
+      }
+    }
+
+    &:after {
+      content: '';
+      position: absolute;
+      width: 0;
+      height: 2px;
+      left: 0;
+      bottom: 0;
+      background-color: transparent;
+      transition: width 0.3s ease;
     }
   }
 `;
 
-// Mobile menu icon styling
-const MobileMenuIcon = styled.div`
+const MenuIcon = styled.div`
   display: none;
-  cursor: pointer;
-  font-size: 1.8em;
-  color: #333;
 
   @media (max-width: 768px) {
     display: block;
-  }
-`;
-
-// Mobile menu styling
-const MobileMenu = styled.div`
-  display: none;
-  position: absolute;
-  top: 60px;
-  right: 0;
-  background-color: #fff;
-  width: 100%;
-  border-radius: 8px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  display: flex;
-  flex-direction: column;
-  padding: 10px;
-  gap: 10px;
-  transform: ${props => props.isOpen ? 'translateY(0)' : 'translateY(-20px)'};
-  opacity: ${props => props.isOpen ? 1 : 0};
-  transition: transform 0.3s ease, opacity 0.3s ease;
-
-  @media (max-width: 768px) {
-    display: flex;
-  }
-`;
-
-const MobileNavItem = styled.div`
-  a {
-    color: #333;
-    text-decoration: none;
-    font-size: 1.2em;
-    padding: 10px;
-    border-radius: 4px;
-    transition: background-color 0.3s ease, color 0.3s ease;
+    font-size: 2rem;
+    color: ${({ theme }) => theme.headerText};
+    cursor: pointer;
+    transition: color 0.3s ease;
 
     &:hover {
-      background-color: #f4a261;
-      color: #fff;
+      color: ${({ theme }) => theme.primary};
     }
   }
 `;
 
-// Header Component
-const Header = () => {
-  const [isMenuOpen, setIsMenuOpen] = React.useState(false);
+const ThemeToggle = styled.div`
+  font-size: 1.8rem;
+  color: ${({ theme }) => theme.headerText};
+  cursor: pointer;
+  transition: color 0.3s ease, transform 0.3s ease;
 
-  // Toggle mobile menu visibility
-  const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
+  &:hover {
+    color: ${({ theme }) => theme.primary};
+    transform: rotate(20deg);
+  }
+
+  @media (max-width: 768px) {
+    position: absolute;
+    top: 1rem;
+    right: 1.5rem;
+  }
+`;
+
+const Separator = styled.div`
+  height: 1px;
+  background: ${({ theme }) => theme.primary};
+  margin-top: 80px; // Ensure there's enough space for the fixed header
+`;
+
+function Header({ toggleTheme, isDarkMode }) {
+  const [isOpen, setIsOpen] = useState(false);
+  const [isScrolled, setIsScrolled] = useState(false);
+  const location = useLocation();
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setIsScrolled(window.scrollY > 50);
+    };
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  const toggleMenu = () => {
+    setIsOpen(!isOpen);
+  };
 
   return (
-    <HeaderContainer>
-      {/* Logo */}
-      <Logo to="/">MySite</Logo>
-
-      {/* Desktop Navigation */}
-      <Nav>
-        <NavList>
-          <NavItem><Link to="/">Home</Link></NavItem>
-          <NavItem><Link to="/about">About</Link></NavItem>
-          <NavItem><Link to="/projects">Projects</Link></NavItem>
-          <NavItem><Link to="/blog">Blog</Link></NavItem>
-          <NavItem><Link to="/contact">Contact</Link></NavItem>
-        </NavList>
-      </Nav>
-
-      {/* Mobile Menu Icon */}
-      <MobileMenuIcon onClick={toggleMenu}>
-        ☰
-      </MobileMenuIcon>
-
-      {/* Mobile Navigation Menu */}
-      <MobileMenu isOpen={isMenuOpen}>
-        <MobileNavItem><Link to="/" onClick={toggleMenu}>Home</Link></MobileNavItem>
-        <MobileNavItem><Link to="/about" onClick={toggleMenu}>About</Link></MobileNavItem>
-        <MobileNavItem><Link to="/projects" onClick={toggleMenu}>Projects</Link></MobileNavItem>
-        <MobileNavItem><Link to="/blog" onClick={toggleMenu}>Blog</Link></MobileNavItem>
-        <MobileNavItem><Link to="/contact" onClick={toggleMenu}>Contact</Link></MobileNavItem>
-      </MobileMenu>
-    </HeaderContainer>
+    <>
+      <HeaderContainer isScrolled={isScrolled}>
+        <Logo>
+          <Link to="/">MyBrand</Link>
+        </Logo>
+        <MenuIcon onClick={toggleMenu}>
+          {isOpen ? <FaTimes /> : <FaBars />}
+        </MenuIcon>
+        <NavMenu isOpen={isOpen}>
+          <NavLinks>
+            <NavLink>
+              <Link to="/" className={location.pathname === '/' ? 'active' : ''} onClick={() => setIsOpen(false)}>Home</Link>
+            </NavLink>
+            <NavLink>
+              <Link to="/about" className={location.pathname === '/about' ? 'active' : ''} onClick={() => setIsOpen(false)}>About</Link>
+            </NavLink>
+            <NavLink>
+              <Link to="/projects" className={location.pathname === '/projects' ? 'active' : ''} onClick={() => setIsOpen(false)}>Projects</Link>
+            </NavLink>
+            <NavLink>
+              <Link to="/blog" className={location.pathname === '/blog' ? 'active' : ''} onClick={() => setIsOpen(false)}>Blog</Link>
+            </NavLink>
+            <NavLink>
+              <Link to="/contact" className={location.pathname === '/contact' ? 'active' : ''} onClick={() => setIsOpen(false)}>Contact</Link>
+            </NavLink>
+          </NavLinks>
+        </NavMenu>
+        <ThemeToggle onClick={toggleTheme}>
+          {isDarkMode ? <HiSun /> : <HiMoon />}
+        </ThemeToggle>
+      </HeaderContainer>
+      <Separator />
+    </>
   );
 }
 
 export default Header;
-
